@@ -1,0 +1,59 @@
+version: '2.1'
+
+services:
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+  postgres:
+    image: "postgres:latest"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'psql_hnews'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  beat:
+    build: .
+    command: bash -c "touch celery-beat.log && celery -A hnews beat -l info &> celery-beat.log"
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_started
+    links:
+      - redis
+    environment:
+      BACKEND_ENV: 'celery'
+  backend:
+    build: .
+    ports:
+      - "8888:8888"
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    links:
+      - postgres
+      - redis
+    environment:
+      BACKEND_ENV: 'prod'
+  celery:
+    build: .
+    command: bash -c "touch celery.log && celery -A hnews worker -l info &> celery.log"
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    links:
+      - redis
+      - postgres
+      - backend
+    environment:
+      BACKEND_ENV: 'celery'

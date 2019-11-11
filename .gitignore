@@ -1,0 +1,9 @@
+*.pyc
+[Tt]emp/
+[Ll]og/
+[Bb]uild/
+*.sqlite3
+.idea/
+.vscode/
+.code/
+celerybeat-schedule
