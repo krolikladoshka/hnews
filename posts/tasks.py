@@ -1,13 +1,11 @@
+from dataclasses import dataclass, asdict
 from datetime import datetime
 from io import StringIO
-from dataclasses import dataclass, asdict
-from typing import Iterable, List, Generator
-
-from django.db import transaction
-from lxml import etree
-from lxml.html import HtmlElement
+from typing import Iterable, List
 
 import requests
+from django.db import transaction
+from lxml import etree
 
 from hnews.celery import app
 from posts.models import Post

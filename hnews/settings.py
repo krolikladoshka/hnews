@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -81,7 +80,7 @@ DATABASES = {
         # or personally i prefer python.decouple with env files
         'PASSWORD': 'postgres',
         'HOST': 'postgres' if os.environ.get('BACKEND_ENV') == 'prod' or os.environ.get('BACKEND_ENV') == 'celery'
-                           else '127.0.0.1',
+        else '127.0.0.1',
         'PORT': 5432,
     }
 }

@@ -1,6 +1,4 @@
-from typing import Any, Dict
-
-from rest_framework import serializers, fields
+from rest_framework import serializers
 
 from posts.models import Post
 
