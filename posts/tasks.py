@@ -46,7 +46,6 @@ class HackerNewsParser:
 @app.task()
 def parse_hackernews_site():
     with transaction.atomic():
-        print('test!')
         last_articles = Post.objects.order_by('-created').values_list('url', flat=True)[:30]
 
         parser = HackerNewsParser()
